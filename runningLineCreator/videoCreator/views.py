@@ -2,13 +2,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from wsgiref.util import FileWrapper
 from videoCreator.creator.ticker import create_running_line
+from .models import TextQuery
+
 import os
+
 # Create your views here.
 def index(request):
-    return HttpResponse("<h2>Видео будет в разрешении 512x512 пикселей и длительностью 3 секунды</h2>")
+    all_messages = TextQuery.objects.values_list("name", flat=True)
+    data = {"allTexts": all_messages}
+    #return HttpResponse("<h2>Видео будет в разрешении 512x512 пикселей и длительностью 3 секунды</h2>")
+    return render(request, "index.html", context=data)
 
 def vsend(request, message):
     create_running_line(message)
+    TextQuery.objects.create(name=message)
+
     path = './/videoCreator//creator//videos//'
     fullname = path + message +'.mp4'
     file = FileWrapper( open( fullname, 'rb') )
@@ -17,4 +25,8 @@ def vsend(request, message):
     os.remove(fullname)
     return response
 
-    return HttpResponse("Видео [" + message + ".mp4] будет в разрешении 512x512 пикселей и длительностью 3 секунды")
+def postuser(request):
+    # получаем из данных запроса POST отправленные через форму данные
+    message = request.POST.get("name", "Undefined")
+    response = vsend(request=request, message=message)
+    return response

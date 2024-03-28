@@ -19,5 +19,6 @@ from videoCreator import views
  
 urlpatterns = [
     path('', views.index, name='home'),
-    path('<str:message>', views.vsend, name='videosender')
+    path('<str:message>', views.vsend, name='videosender'),
+    path("postuser/", views.postuser),
 ]

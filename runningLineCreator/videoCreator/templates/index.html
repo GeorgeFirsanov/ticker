@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Бегущая строка</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>Создать бегущую строку</h1>
+    <form method="post" action="postuser/">
+        {% csrf_token %}
+        <p>Текст бегущей строки:<br> <input name="name" /></p>
+        <input type="submit" value="Сгенерировать" />
+    </form>
+    <p>Видео будет в разрешении 512x512 пикселей и длительностью 3 секунды</p>
+    <h2>История создания:</h2>
+    {% for x in allTexts %}
+    <li>{{ x }}.mp4</li>
+    {% endfor %}
+</body>
+</html>
